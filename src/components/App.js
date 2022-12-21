@@ -1,23 +1,26 @@
-import React, {useState}from "react";
+import React, { useState, useContext } from "react";
 import "../styles/App.css";
 import Movie from "./Movie";
+import UserContext from "./MovieContext";
 import MoviesList from "./MoviesList";
 
 const App = () => {
+  const [condtion, setCondtion] = useState(false);
+  const [st, setState] = useState(1);
+  const state = useContext(UserContext);
 
-  const [val, setVal] = useState([])
-  function call(val){
-    setVal(val)
-  }
-  // console.log(val.length===0)
-  
+  const handleClick = (e, key) => {
+    // console.log(key);
+    setState(key);
+    setCondtion(true);
+  };
   return (
     <div id="main">
       <h1>Movie List</h1>
-      <MoviesList function={call}/>
-      {
-        val.length===0 ? <div id="movies-banner">Invalid Id</div>: <Movie Movie_director={val.director} Movie_year={val.year}  Movie_title={val.title}/>
-      }
+      <UserContext.Provider value={state}>
+        <MoviesList handleClick={handleClick} />
+        <Movie value={st - 1} condtion = {condtion}  />
+      </UserContext.Provider>
     </div>
   );
 };
